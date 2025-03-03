@@ -7,20 +7,99 @@ using namespace std;
 
 int converter() {
 
-    string measure_sys;
-    
+    int sys_index;
+    int sys_index_fix;
+    int sec_sys_index; 
+    int sec_sys_i_fix;
+    int year;
+    int result; 
+
+
+    // for when i implement converted year output
+#if 0
+    if (result <= 0) {
+        cout << sec_sys << " does not exist at the time of " << year << " " << first_sys << endl;
+    }
+#endif // 0
+
+
+
+    string first_sys;
+    string sec_sys;
+    string first_prompt = "Enter a time system you'd like to use to convert from (1-3): ";
+    string second_prompt = "\n\nEnter the time system you'd like to convert to (1-3): ";
+    string third_prompt = "Enter the number of years you're converting: ";
+
+    const int AS_TO_EK = 1011; // subtract constant
+    const int EK_TO_AS = 1011; // add constant
+    const int E_TO_AS = 12878; // subtract constant
+    const int E_TO_EK = 13889; // subtract constant
+    const int AS_TO_E = 12878; // add constant
+    const int EK_TO_E = 13889; // add constant
+  
     // array declaration
-    string time_systems[3] = { "AS | Aeon Soterias", "EK | Etous tou Kyriou", "E | Extranor"};
-    int arr_length = sizeof(time_systems) / sizeof(time_systems[0]);
+    string time_systems[] = { "AS | Aeon Soterias", "EK | Etous tou Kyriou", "E  | Extranor"};
 
-    cout << "Enter the system of time measurement you're using." << endl;
-    cin >> measure_sys;
+    // conversion matrix
+    double conversion_data[3][3] = {
+        {0, -AS_TO_EK, AS_TO_E},
+        {EK_TO_AS, 0, EK_TO_E},
+        {-E_TO_AS, -E_TO_EK, 0}
+    };
+    
+    // range-based for loop to print out the elements of the time_systems[] array
+    
+    int i = 1;
+    for (string& element : time_systems) {
+        cout << i << ": " << element << endl;
+        i++;
+    }
 
-    /* 
-whatever value measure_sys is should correspond to an element in time_systems[]. this means 
-     */
+    do
+    {
+        cout << first_prompt << endl;
 
-    cout << measure_sys;
+        // input type checker. just prompts for re-input if user enters anything other than an int
+        if (!(cin >> sys_index)){
+            cout << "Invalid input." << endl;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            continue;
+        }
+
+        // checks if sys_index is within the range of time_systems[] 
+        if (sys_index >= 1 && sys_index <= size(time_systems)) {
+            sys_index_fix = sys_index - 1;
+            first_sys = time_systems[sys_index_fix];
+            cout << "You selected: " << first_sys << endl;
+        }
+        else if (sys_index > size(time_systems)) {
+            cout << "Invalid input." << endl;
+            continue;
+        }
+
+
+        cout << second_prompt << endl;
+
+        if (!(cin >> sec_sys_index)){
+            cout << "Invalid input." << endl;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            continue;
+        }
+
+        if (sec_sys_index >= 1 && sec_sys_index <= size(time_systems) && sec_sys_index != sys_index) {
+            sec_sys_i_fix = sec_sys_index - 1;
+            sec_sys = time_systems[sec_sys_i_fix];
+            cout << "You selected: " << sec_sys << endl;
+            break;
+
+        }
+
+
+    } while (true);
+
+    // ok now i somehow have to make comparisons between first_sys and the second system of chronological measurement. i'm thinking of doing a for loop to compare the first_sys to another sys
 
     return 0;
 }
@@ -30,14 +109,3 @@ int main()
     converter();
 
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
